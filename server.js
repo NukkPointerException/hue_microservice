@@ -5,6 +5,8 @@ var express = require('express'),
 var http = require('http');
 var fs = require('fs');
 
+var jsonPayloads = require('./jsonPayloads');
+
 //Todo: Move these values to a properties utility class
 //Keep API key in a git ignored file
 var credContents = fs.readFileSync('creds.pi', 'utf8');
@@ -15,7 +17,7 @@ var api_key = credentials[0];
 var controller_key = credentials[1];
 
 //Get mapping of light name to light number
-//var bedroomLight = '3';
+//var bedroomLight actual = '3';
 var bedroomLight = '1';
 var sittingroomLight = '2';
 
@@ -30,25 +32,26 @@ var api_root = '/api/' + api_key +  '/';
 var sittingroom_light_root = api_root + 'lights/2/';
 var bedroom_light_root = api_root + 'lights/' + bedroomLight + '/';
 
-// Controller Routes
+// Controller Routes ----------------------------------------------
 //todo move to route builder function
 var sittingroomLight_on = controller_key + '/sittingroomLight/on';
 var sittingroomLight_off = controller_key + '/sittingroomLight/off';
+var sittingroomLight_dim = controller_key + '/sittingroomLight/dim';
+
+var sittingroomLight_movie_play = controller_key + '/sittingroomLight/moviePlay';
+var sittingroomLight_movie_pause = controller_key + '/sittingroomLight/moviePause';
+var sittingroomLight_movie_stop = controller_key + '/sittingroomLight/movieStop';
+
 
 var bedroomLight_on = controller_key + '/bedroomLight/on';
 var bedroomLight_off = controller_key + '/bedroomLight/off';
 //Getting fancy
 var bedroomLight_dim = controller_key + '/bedroomLight/dim';
-
-//JSON payloads
-//todo: move to own class
-var light_bright = '{"on": true, "bri": 254, "hue": 8402, "sat": 140}';
-var light_off = '{"on":false}';
-var light_dim = '{"on":true, "bri": 77, "hue": 8402, "sat": 140}';
+//--------------------------------------------------------------------------------------------
 
 app.get(bedroomLight_on, function(req, res) {
     console.log('Bedroom Light on.');
-    var requestURL = bedroom_light_root + 'state11';
+    var requestURL = bedroom_light_root + 'state';
 
     //Build URL to send request to
     var options = {
@@ -66,7 +69,7 @@ app.get(bedroomLight_on, function(req, res) {
         });
     });
     //Setting JSON payload to tell bridge what we want to do.
-    reqOut.write(light_bright);
+    reqOut.write(jsonPayloads.light_bright());
     reqOut.end();
     //req.json();
     res.json({message: "Done."})
@@ -89,7 +92,7 @@ app.get(bedroomLight_off, function(req, res) {
 
     });
     //Setting JSON payload to tell bridge what we want to do.
-    reqOut.write(light_off);
+    reqOut.write(jsonPayloads.light_off());
     reqOut.end();
     //req.json();
     res.json({message: "Done."})
@@ -112,7 +115,7 @@ app.get(bedroomLight_dim, function(req, res) {
 
     });
     //Setting JSON payload to tell bridge what we want to do.
-    reqOut.write(light_dim);
+    reqOut.write(jsonPayloads.light_dim());
     reqOut.end();
     //req.json();
     res.json({message: "Done."})
