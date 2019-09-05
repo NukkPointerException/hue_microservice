@@ -17,7 +17,7 @@ var api_key = credentials[0];
 var controller_key = credentials[1];
 
 //Get mapping of light name to light number
-//var bedroomLight actual = '3';
+var bedroomLight = '3';
 var bedroomLight = '1';
 var sittingroomLight = '2';
 
