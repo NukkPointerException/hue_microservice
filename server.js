@@ -21,7 +21,7 @@ var bedroomLight  = '3';
 //var bedroomLight = '1';
 var sittingroomLight = '2';
 
-var bridgeIP = '192.168.0.241';
+var bridgeIP = '192.168.0.242';
 var bridgePort = '80';
 
 
@@ -31,6 +31,7 @@ var bridgePort = '80';
 var api_root = '/api/' + api_key +  '/';
 var sittingroom_light_root = api_root + 'lights/2/';
 var bedroom_light_root = api_root + 'lights/' + bedroomLight + '/';
+var kitchen_light_root = api_root + 'lights/4/'
 
 // Controller Routes ----------------------------------------------
 //todo move to route builder function
@@ -47,6 +48,111 @@ var bedroomLight_on = controller_key + '/bedroomLight/on';
 var bedroomLight_off = controller_key + '/bedroomLight/off';
 //Getting fancy
 var bedroomLight_dim = controller_key + '/bedroomLight/dim';
+
+//Work Related Signals
+var kitchenLight_on = controller_key +  '/kitchenLight/on'; //normal on
+var kitchenLight_off = controller_key +  '/kitchenLight/off';
+var kitchenLight_green = controller_key +  '/kitchenLight/green';
+var kitchenLight_red = controller_key +  '/kitchenLight/red';
+
+//Kitchen Lights
+app.get(kitchenLight_on, function(req, res) {
+    console.log('Kitchen Light on.');
+    var requestURL = kitchen_light_root + 'state';
+
+    //Build URL to send request to
+    var options = {
+        host: '192.168.0.242',
+        port: 80,
+        path: requestURL,
+        method: 'PUT'
+    };
+
+    var reqOut = http.request(options, function(resIn) {
+        console.log("Sending");
+        resIn.on("data", function(chunk) {
+            console.log("BODY: " + chunk);
+        });
+    });
+    //Setting JSON payload to tell bridge what we want to do.
+    reqOut.write(jsonPayloads.kitchen_on());
+    reqOut.end();
+    res.json({message: "Done."})
+});
+
+app.get(kitchenLight_off, function(req, res) {
+    console.log('Kitchen Light on.');
+    var requestURL = kitchen_light_root + 'state';
+
+    //Build URL to send request to
+    var options = {
+        host: '192.168.0.242',
+        port: 80,
+        path: requestURL,
+        method: 'PUT'
+    };
+
+    var reqOut = http.request(options, function(resIn) {
+        console.log("Sending");
+        resIn.on("data", function(chunk) {
+            console.log("BODY: " + chunk);
+        });
+    });
+    //Setting JSON payload to tell bridge what we want to do.
+    reqOut.write(jsonPayloads.light_off());
+    reqOut.end();
+    res.json({message: "Done."})
+});
+
+app.get(kitchenLight_green, function(req, res) {
+    console.log('Kitchen Light on.');
+    var requestURL = kitchen_light_root + 'state';
+
+    //Build URL to send request to
+    var options = {
+        host: '192.168.0.242',
+        port: 80,
+        path: requestURL,
+        method: 'PUT'
+    };
+
+    var reqOut = http.request(options, function(resIn) {
+        console.log("Sending");
+        resIn.on("data", function(chunk) {
+            console.log("BODY: " + chunk);
+        });
+    });
+    //Setting JSON payload to tell bridge what we want to do.
+    reqOut.write(jsonPayloads.light_green());
+    reqOut.end();
+    res.json({message: "Done."})
+});
+
+app.get(kitchenLight_red, function(req, res) {
+    console.log('Kitchen Light on.');
+    var requestURL = kitchen_light_root + 'state';
+
+    //Build URL to send request to
+    var options = {
+        host: '192.168.0.242',
+        port: 80,
+        path: requestURL,
+        method: 'PUT'
+    };
+
+    var reqOut = http.request(options, function(resIn) {
+        console.log("Sending");
+        resIn.on("data", function(chunk) {
+            console.log("BODY: " + chunk);
+        });
+    });
+    //Setting JSON payload to tell bridge what we want to do.
+    reqOut.write(jsonPayloads.light_red());
+    reqOut.end();
+    res.json({message: "Done."})
+});
+
+
 //--------------------------------------------------------------------------------------------
 
 app.get(bedroomLight_on, function(req, res) {
